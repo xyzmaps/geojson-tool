@@ -1,0 +1,621 @@
+/*
+ * Copyright (C) 2019 HERE Europe B.V.
+ * Licensed under MIT, see full license in LICENSE
+ * SPDX-License-Identifier: MIT
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body{
+    width: 100%;
+    height: 100%;
+}
+
+body{
+    overflow: hidden;
+    font-size: 16px;
+    line-height: 20px;
+    font-family: "FiraGO","Fira Sans",sans-serif;
+}
+
+button {
+    font-family: "FiraGO","Fira Sans",sans-serif;
+}
+
+#map {
+    background-color: #e1e1e1;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#map > div:first-child {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#map > div:first-child > canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#info{
+    z-index: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: rgba(30, 30, 30, 0.8);
+    border-radius: 5px;
+    max-height: 100%;
+    max-width: 40%;
+    min-width: 300px;
+    overflow: auto;
+}
+
+#info >div:first-child{
+    padding: 0.5em;
+
+}
+
+.mainWrapper {
+    height: 100%;
+}
+
+.main-container {
+    display: grid;
+    grid-template-columns: 65% 7px 34.61%;
+    height: 100%;
+}
+
+.panel-wrapper {
+    background-color: #fff;
+}
+
+.editor-wrapper {
+    width: 100%;
+    height: calc(100vh - 50px);
+    border-left: 1px solid #e1e1e1;
+}
+
+.editor-wrapper .edit {
+    display: none;
+}
+
+.sliderPan {
+    background: #fff url("../images/drag-dots.svg") center no-repeat;
+    background-size: 29px;
+    display: block;
+}
+
+.load-sample-wrapper,
+.load-data-wrapper,
+.lat-long-wrapper,
+.geojson-url-wrapper {
+    background-color: #f5f4f4;
+    padding: 15px;
+    height: calc(100% - 40px);
+    width: 100%;
+}
+
+.load-data-wrapper {
+    border-left: 1px solid #e1e1e1;
+}
+
+.load-sample-wrapper > a {
+    font-family: "FiraGO","Fira Sans",sans-serif;
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 80% 15%;
+    grid-column-gap: 10px;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    text-decoration: none;
+    color: #000;
+}
+
+.lat-long-wrapper > div {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% auto;
+    grid-column-gap: 20px;
+}
+
+.geojson-url-wrapper > div {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 80% 15%;
+    grid-column-gap: 20px;
+}
+
+.tab-content {
+    display: none;
+}
+
+.editor-wrapper {
+    display: block;
+}
+
+.load-data-wrapper h1 {
+    font-size: 16px;
+}
+
+.load-data-wrapper ul li:nth-child(odd) {
+    background-color: #fff;
+}
+
+.load-data-wrapper ul li {
+    width: 100%;
+    height: 45px;
+    padding-left: 12px;
+    line-height: 45px;
+    cursor: pointer;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: underline;
+}
+
+.loadDiv,
+.loadDataFromUploadedFile,
+.loadDataFromUrl {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #dedede;
+}
+.loadDiv > div,
+.loadDataFromUrl > div{
+    margin-top: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.loadDiv div span,
+.loadDataFromUploadedFile div span {
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.map-container {
+    height: calc(100% - 50px);
+    width: 100%;
+    position: relative;
+}
+
+.map-panel-wrapper {
+    margin: auto 0;
+}
+
+.geojson-url-or-latlong {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 16px;
+    outline: none;
+    border: 0;
+    font-weight: 400;
+    border-bottom: 1px solid #c7c7c7;
+    margin-right: 10px;
+}
+
+.geojson-url-or-latlong:focus {
+    background-color: #fff;
+    border-bottom: 1px solid #08D473;
+}
+
+.geojson-url-or-latlong::-webkit-input-placeholder {
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 100;
+    color: #919191;
+}
+
+/* Notification bar */
+
+.alert-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    line-height: 50px;
+    background: #FBCA40;
+    z-index: 111;
+    padding: 0 20px;
+    display: none;
+    font-size: 17px;
+}
+
+.remove-bar {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.prettyPrint {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 20px;
+    height: 23px;
+    background-color: grey;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 3px;
+    font-size: 14px;
+    z-index: 111;
+}
+
+.mapSwitcher {
+    position: absolute;
+    right: 55px;
+    bottom: 23px;
+    padding: 0 5px;
+    height: 40px;
+    background: #fff;
+    font-size: 13px;
+    border-radius: 4px;
+    z-index: 6;
+}
+
+.mapSwitcher:hover {
+    box-sizing: border-box;
+    position: absolute;
+    right: 55px;
+    bottom: 23px;
+    padding: 0 5px;
+    height: 40px;
+    background: #fff;
+    font-size: 13px;
+    border-radius: 4px;
+    z-index: 6;
+}
+
+.mapSwitcher img {
+    display: none;
+}
+
+.mapSwitcher:hover img {
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 50px;
+    height: 40px;
+}
+
+.mapSwitcher span:first-child {
+    border-left: 0;
+}
+
+.mapSwitcher .activeStyle{
+    display: inline-block;
+    vertical-align: middle;
+    color: #000;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    width: 50px;
+    height: 40px;
+}
+
+#fullScreenToggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    background: #fff url("../images/full-screen.svg") 0 3px no-repeat;
+    width: 24px;
+    height: 25px;
+    border-radius: 3px;
+}
+
+.error-tooltip:before {
+    opacity: 0;
+    pointer-events: none;
+    content: attr(message);
+    transition: opacity .4s;
+    -moz-transition: opacity .4s;
+    -webkit-transition: opacity .4s;
+    -o-transition: opacity .4s;
+    -ms-transition: opacity .4s;
+    -webkit-transition: all 100ms;
+    content: attr(message);
+    width: 300px;
+    max-width: 600px;
+    font-size: 10pt;
+    padding: 2px 5px;
+    border: 1px solid black;
+    border-radius: 4px 4px 4px 4px;
+    position: absolute;
+    background-color: #ffd;
+    z-index: 999;
+}
+
+.error-tooltip:hover:before {
+    opacity:1;
+    margin-left:56px;
+}
+
+.json-formatter-dark.json-formatter-row .json-formatter-key {
+    cursor: pointer;
+}
+
+.latlongBtn {
+    background-color: #08D473;
+    border: #00000000;
+    cursor: pointer;
+    color: #ffffff;
+    padding: 7px;
+    outline: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 2px;
+    font-size: 14px;
+    width: 50px;
+}
+
+.tab {
+    box-shadow: 10px -4px 8px 1px #696969;
+    z-index: 9;
+    position: relative;
+    height: 50px;
+}
+
+.tab button {
+    margin-top: 10px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 1px;
+    outline: none;
+    cursor: pointer;
+    padding: 16px 20px 10px 20px;
+    transition: 0.3s;
+    font-size: 16px;
+    background: transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.tab > button.selected {
+    background-color: rgba(9, 148, 222, 0.1);
+    color: #000;
+    border-bottom: 5px solid rgb(9, 148, 222);
+}
+
+.tabContent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+.authorize,
+.geojsonFileInput,
+.getgeoJSONByUrl {
+    background-color: #08D473;
+    border: #00000000;
+    font-size: 15px;
+    cursor: pointer;
+    color: #ffffff;
+    padding: 8px 7px 7px 8px;
+    outline: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 95px;
+    user-select: none;
+    height: 40px;
+    border-radius: 2px;
+}
+
+.inputClass,
+.geojsonUrl {
+    display: block;
+    width: calc(100% - 110px);
+    padding: 0 10px;
+    color: inherit;
+    font-size: inherit;
+    background: #e4e6e9;
+    border: 1px solid #e4e6e9;
+    text-align: inherit;
+    border-color: #babcc4;
+    height: 40px;
+    font-weight: 400;
+}
+.inputClass::placeholder,
+.geojsonUrl::placeholder {
+    font-style: italic;
+    font-weight: 100;
+}
+
+input:focus {
+    border-color: white;
+    background-color: white;
+    transition-duration: 0.2s;
+    transition-property: inherit;
+    outline: none;
+}
+
+.loadDataFromUploadedFile,
+.resetEditor {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.xyzlogo {
+    background: url('../images/xyz-logo.svg') no-repeat;
+    width: 80px;
+    height: 33px;
+    margin: auto 0;
+}
+
+.navlinks {
+    display: inline-block;
+}
+
+/* Loader */
+
+
+.loader {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 175, 170, 0.3);
+    z-index: 999;
+    display: none;
+}
+
+.loader div {
+    padding: 20px;
+    width: 236px;
+    background: #fdfdfd;
+    border-radius: 5px;
+    border:0;
+    color:#04a6a1;
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-left: -118px;
+    margin-top: -30px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 400;
+}
+
+/* Zoom Control */
+
+.wrapper-zoomControl {
+    position: absolute;
+    right: 10px;
+    bottom: 20px;
+    text-align: center;
+    font-family: sans-serif;
+    color: #000;
+    user-select: none;
+    z-index: 1;
+}
+
+.wrapper-zoomControl div {
+      background: #fff;
+      border-radius: 4px;
+      font-size: 12px;
+      width: 28px;
+      margin: 2px;
+}
+
+
+.wrapper-zoomControl .zoomButton {
+    background: #fff;
+    width: 28px;
+    height: 28px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.2s;
+    cursor: pointer;
+    line-height: 22px;
+    font-weight: 200;
+    font-size: 27px;
+    border-radius: 4px;
+    margin: 2px;
+    outline: none;
+    color: #000000;
+  }
+
+  .wrapper-zoomControl .button:hover {
+      background-color: #e1e1e1;
+      cursor: pointer;
+    }
+
+/* Zoom Control */
+
+
+/* To avoid FOUC */
+
+.desktopNavigationBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #fff;
+    height: 50px;
+    padding: 5px 30px;
+    box-shadow: -12px -2px 8px 1px #696969;
+    z-index: 9;
+    position: relative;
+}
+.main-container {display: grid;}
+
+#editor-tab {
+    z-index: 0;
+    background: url("../images/document-edit.svg") no-repeat center;
+}
+
+#load-data-tab {
+    z-index: 0;
+    background: url("../images/file-upload.svg") no-repeat center;
+}
+
+#load-sample-tab {
+    z-index: 0;
+    background: url("../images/worldwide.svg") no-repeat center;
+}
+
+#copyToClipboard {
+    z-index: 0;
+    background: url("../images/cp.svg") no-repeat center;
+}
+
+#clearContent {
+    z-index: 0;
+    background: url("../images/cleaning.svg") no-repeat center;
+}
+
+#darkMode {
+    z-index: 0;
+    background: url("../images/dark-mode.svg") no-repeat center;
+}
+
+#showQuadkeys {
+    background: #fff url("../images/quadkeys.png") no-repeat center;
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    cursor: pointer;
+    width: 24px;
+    height: 20px;
+    border-radius: 2px;
+}
+
+#changeFeatureColor {
+    display: none;
+    background: #00afaa;
+    width: 20px;
+    height: 16px;
+    position: absolute;
+    right: 55px;
+    bottom: 70px;
+    border: 2px solid rgba(29,87,84,0.0);
+}
