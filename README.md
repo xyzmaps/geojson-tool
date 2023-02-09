@@ -15,7 +15,7 @@ The GeoJSON Tool is a web based visualization tool for GeoJSON data that can qui
 
 ## Getting Started
 
-### [Getting Started Guide](https://www.here.xyz/viewer-tool/)
+### Getting Started Guide
 
 Also below is the list of feature available with this tool:  
 
@@ -31,7 +31,7 @@ Also below is the list of feature available with this tool:
 -   Highlight features with matching properties by clicking on property label in feature explorer pop-up card.
 -   Map only view option from UI as well as URL parameters.
 -   Displaying feature colors if available in property object of feature.
--   Visualize your XYZ space data directly from URL using `spaceId` and `access_token` (https://geojson.tools/?space=Opxf79Cn&access_token=EQvJESGWqtBGYkGBgRHMZw)
+-   Visualize your XYZ space data directly from URL using for example `url=http://localhost:8080/hub/spaces/QL5wrOzP/search?limit=5000`
 -   If GeoJSON properties object contains `heading_drg` or `vehicBearing` then it renders point as arrow image with provided bearing.
 -   If GeoJSON properties object contains `marker-url` then it renders image from given url instead of point on map.
 -   If GeoJSON properties object contains `marker-text` then it display given text instead of point on map.
@@ -47,12 +47,11 @@ npm install
 Run a local server with:
 
 ```
-export APIKEY=HereApiKey && npm start
+npm start
 ```
 
 An App will be served at http://localhost:3000
 
-Note: You can generate your APIKEY at http://developer.here.com
 
 
 ## Versioning
@@ -61,6 +60,8 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 
 ## License
+
+Copyright (C) 2023 XYZ Maps and contributors
 
 Copyright (C) 2019 HERE Europe B.V.
 

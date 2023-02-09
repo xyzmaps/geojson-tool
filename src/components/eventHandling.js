@@ -5,8 +5,6 @@
  */
 
 import {
-    satelliteLayer,
-    terrainLayer,
     miamiDayLayer,
     springSoftLayer,
     springBrightLayer,

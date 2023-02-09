@@ -1,8 +1,8 @@
 # Introduction
 
-The team behind the [GeoJSON-tool](https://github.com/heremaps/geojson-tool) gratefully accepts contributions via
+The team behind the [GeoJSON-tool](https://github.com/xyzmaps/geojson-tool) gratefully accepts contributions via
 [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the
-[GitHub project](https://github.com/heremaps/geojson-tool/pulls).
+[GitHub project](https://github.com/xyzmaps/geojson-tool/pulls).
 
 # Signing each Commit
 

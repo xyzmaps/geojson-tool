@@ -8,7 +8,7 @@ import '@here/xyz-maps-common';
 import '@here/xyz-maps-core';
 import {Map} from '@here/xyz-maps-display';
 import '@here/xyz-maps-display';
-import {MVTLayer, TileLayer, ImageProvider, LocalProvider} from "@here/xyz-maps-core";
+import {MVTLayer, TileLayer, LocalProvider} from "@here/xyz-maps-core";
 import  { getCustomStyle } from './getCustomStyle';
 import springSoft from "../themes/WithLabel/here/spring-soft";
 import miamiDay from "../themes/WithLabel/here/miamiDay";
@@ -27,7 +27,7 @@ function getMVTLayerWithStyle(style) {
     return new MVTLayer({
         name   : 'mvt-world-layer',
         remote : {
-            url : 'https://vector.hereapi.com/v2/vectortiles/base/mc/{z}/{x}/{y}/omv?apiKey='+creds.APIKEY
+            url : 'https://tile.nextzen.org/tilezen/vector/v1/256/all/{z}/{x}/{y}.mvt?api_key=DpCrhQqsR2igQPEINRTfcw'
         },
         min : 1,
         max : 20,
@@ -42,24 +42,6 @@ let miamiDayLayer = getMVTLayerWithStyle(miamiDay),
     lineDarkLayer = getMVTLayerWithStyle(lineDark),
     lineWhiteLayer = getMVTLayerWithStyle(lineWhite);
 
-let satelliteLayer = new TileLayer({
-    name: 'Satellite Layer',
-    min: 1,
-    max: 20,
-    provider: new ImageProvider({
-        url: 'https://{SUBDOMAIN_INT_1_4}.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{LEVEL}/{COL}/{ROW}/256/png8?apiKey='+creds.APIKEY
-    })
-});
-
-let terrainLayer = new TileLayer({
-    name: 'Terrain Layer',
-    min: 1,
-    max: 20,
-    provider: new ImageProvider({
-        url: 'https://{SUBDOMAIN_INT_1_4}.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/terrain.day/{LEVEL}/{COL}/{ROW}/256/png8?apiKey='+creds.APIKEY
-    })
-});
-
 let featureProvider = new LocalProvider({
     name: 'featureProvider'
 });
@@ -73,9 +55,6 @@ let featureLayer = new TileLayer({
 });
 
 let config = {
-    credentials: {
-        apiKey: creds.APIKEY,
-    },
     zoomLevel: urlParam ? zoom : 2,
     center: {
         "longitude": urlParam ? long : 25.91699,
@@ -95,8 +74,6 @@ window.display = new Map(document.getElementById("map"), config);
 
 export {
     featureProvider,
-    satelliteLayer,
-    terrainLayer,
     springSoftLayer,
     springBrightLayer,
     miamiDayLayer,

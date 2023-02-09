@@ -1,10 +1,10 @@
 {
-  "name": "@here/geojson-tool",
+  "name": "xyzmaps-geojson-tool",
   "version": "1.2.0",
   "private": true,
   "author": {
-    "name": "HERE Europe B.V.",
-    "url": "https://here.com"
+    "name": "XYZ Maps and contributors",
+    "url": "https://github.com/xyzmaps"
   },
   "license": "MIT",
   "description": "A web based visualization tool for GeoJSON data.",
@@ -15,16 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heremaps/geojson-tool"
+    "url": "https://github.com/xyzmaps/geojson-tool"
   },
   "bugs": {
-    "url": "https://github.com/heremaps/geojson-tool/issues"
+    "url": "https://github.com/xyzmaps/geojson-tool/issues"
   },
   "keywords": [
     "GeoJSON",
-    "HERE",
-    "HERE Technologies",
-    "XYZ Map Visualization",
+    "XYZ Maps Visualization",
     "Map Visualization"
   ],
   "devDependencies": {

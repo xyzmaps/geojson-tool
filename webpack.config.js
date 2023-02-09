@@ -10,13 +10,6 @@ const webpack = require("webpack"),
 		MonacoWebpackPlugin = require('monaco-editor-webpack-plugin'),
 		CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// Check if environment variables for keys are defined
-if(process.env.APIKEY === undefined) {
-	console.log('oops! APIKEY is not defined');
-	console.log('Make sure to run "export APIKEY=<token>" before npm run start or npm run build');
-	console.log('You can get the APIKEY at https://developer.here.com');
-	process.exit(-1);
-}
 
 module.exports = {
 	stats: 'errors-only',
@@ -73,11 +66,6 @@ module.exports = {
 			inject: 'body',
 			template: './src/index.html',
 			favicon: './src/images/logo.svg'
-		}),
-		new webpack.DefinePlugin({
-			'creds': {
-				'APIKEY': JSON.stringify(process.env.APIKEY)
-			}
 		}),
 		new MonacoWebpackPlugin(),
 		new CopyWebpackPlugin({
