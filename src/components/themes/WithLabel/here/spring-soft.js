@@ -801,7 +801,7 @@ const springSoft = {
         return;
       }
 
-      if (kind === 'ocean') {
+      if (kind === 'oceans') {
         if (feature.properties.min_zoom <= 6) {
           return 'oceanLabels';
         }
