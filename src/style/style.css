@@ -19,11 +19,11 @@ body{
     overflow: hidden;
     font-size: 16px;
     line-height: 20px;
-    font-family: "FiraGO","Fira Sans",sans-serif;
+    font-family: sans-serif;
 }
 
 button {
-    font-family: "FiraGO","Fira Sans",sans-serif;
+    font-family: sans-serif;
 }
 
 #map {
@@ -90,6 +90,11 @@ button {
     background-size: 29px;
     display: block;
 }
+.sliderPanDark {
+    background: #000 url("../images/drag-dots.svg") center no-repeat;
+    background-size: 29px;
+    display: block;
+}
 
 .load-sample-wrapper,
 .load-data-wrapper,
@@ -106,7 +111,8 @@ button {
 }
 
 .load-sample-wrapper > a {
-    font-family: "FiraGO","Fira Sans",sans-serif;
+    font-family: sans-serif;
+    text-decoration: underline;
     margin-top: 30px;
     display: grid;
     grid-template-columns: 80% 15%;
@@ -116,7 +122,7 @@ button {
 a.button {
     -webkit-appearance: button;
     -moz-appearance: button;
-    text-decoration: none;
+    /* text-decoration: none; */
     color: #000;
 }
 
@@ -380,6 +386,7 @@ a.button {
     z-index: 9;
     position: relative;
     height: 50px;
+    overflow: hidden;
 }
 
 .tab button {
@@ -570,32 +577,32 @@ input:focus {
 
 #editor-tab {
     z-index: 0;
-    background: url("../images/document-edit.svg") no-repeat center;
+    background: url("../images/light/code.svg") no-repeat center;
 }
 
 #load-data-tab {
     z-index: 0;
-    background: url("../images/file-upload.svg") no-repeat center;
+    background: url("../images/light/tool.svg") no-repeat center;
 }
 
 #load-sample-tab {
     z-index: 0;
-    background: url("../images/worldwide.svg") no-repeat center;
+    background: url("../images/light/gift.svg") no-repeat center;
 }
 
 #copyToClipboard {
     z-index: 0;
-    background: url("../images/cp.svg") no-repeat center;
+    background: url("../images/light/copy.svg") no-repeat center;
 }
 
 #clearContent {
     z-index: 0;
-    background: url("../images/cleaning.svg") no-repeat center;
+    background: url("../images/light/trash-2.svg") no-repeat center;
 }
 
 #darkMode {
     z-index: 0;
-    background: url("../images/dark-mode.svg") no-repeat center;
+    background: url("../images/light/moon.svg") no-repeat center;
 }
 
 #showQuadkeys {

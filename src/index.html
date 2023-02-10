@@ -12,7 +12,7 @@
     <style>.desktopNavigationBar {display: none;} .main-container {display: none;} .alert-bar {display: none;}</style><!--  To avoid FOUC  -->
   </head>
   <body>
-    <div class="loader"><div>Please wait...</div></div>
+    <div class="loader"><div>Scanning the planet...</div></div>
     <div class="mainWrapper">
   <div id="alertBar" class="alert-bar"><span id="barMessage"></span> <span title="Close" id="remove-bar" class="remove-bar">X</span></div>
   <div id="mainContainer" class="main-container">
@@ -55,12 +55,13 @@
               <button id="darkMode" title="Dark Mode"></button>
           </div>
           <div id="load-sample-wrapper" class="load-sample-wrapper tab-content">
-                <a href="#url=https://data.cityofnewyork.us/api/geospatial/drex-xx56?method=export&format=GeoJSON" class="button">Point</a><!-- https://opendata.cityofnewyork.us/overview/#termsofuse-->
-                <a href="#url=https://gist.githubusercontent.com/felipedeaujaques/cf8ceb1804cf7fdd2fdd881ded6bb47c/raw/2cf16c58028250fd14acfdba50210f98dbc10346/MultiPoint.geojson" class="button">MultiPoint</a>
-                <a href="#url=https://geo.sv.rostock.de/download/opendata/strassenbahnlinien/strassenbahnlinien.json" class="button">LineString</a><!-- CC0 1.0 Universal (CC0 1.0) Public Domain Dedication-->
-                <a href="#url=https://data.cityofnewyork.us/api/geospatial/ycrg-ses3?method=export&format=GeoJSON" class="button">MultiLineString</a><!-- https://opendata.cityofnewyork.us/overview/#termsofuse-->
-                <a href="#url=https://opendata.arcgis.com/datasets/8dc58605f9dd484295c7d065694cdc0f_0.geojson" class="button">Polygon</a><!-- https://www.opendataphilly.org/dataset/police-service-areas-->
-                <a href="#url=https://geo.sv.rostock.de/download/opendata/parkanlagen/parkanlagen.json" class="button">MultiPolygon</a><!-- CC0 1.0 Universal (CC0 1.0) Public Domain Dedication-->
+            A random collection of GeoJSON Open Data samples to get you started with the various FeatureTypes:
+                <a href="#url=https://data.cityofnewyork.us/api/geospatial/drex-xx56?method=export&format=GeoJSON" class="button">Points of NYC MTA stations</a><!-- https://opendata.cityofnewyork.us/overview/#termsofuse-->
+                <a href="#url=https://gist.githubusercontent.com/felipedeaujaques/cf8ceb1804cf7fdd2fdd881ded6bb47c/raw/2cf16c58028250fd14acfdba50210f98dbc10346/MultiPoint.geojson" class="button">MultiPoints in the ocean somewhere</a>
+                <a href="#url=https://geo.sv.rostock.de/download/opendata/strassenbahnlinien/strassenbahnlinien.json" class="button">LineStrings of streetcars in Rostock</a><!-- CC0 1.0 Universal (CC0 1.0) Public Domain Dedication-->
+                <a href="#url=https://data.cityofnewyork.us/api/geospatial/ycrg-ses3?method=export&format=GeoJSON" class="button">MultiLineString in New York</a><!-- https://opendata.cityofnewyork.us/overview/#termsofuse-->
+                <a href="#url=https://opendata.arcgis.com/datasets/8dc58605f9dd484295c7d065694cdc0f_0.geojson" class="button">Polygons for Philadelpha Police Service Areas</a><!-- https://www.opendataphilly.org/dataset/police-service-areas-->
+                <a href="#url=https://geo.sv.rostock.de/download/opendata/parkanlagen/parkanlagen.json" class="button">MultiPolygons of parks in Rostock</a><!-- CC0 1.0 Universal (CC0 1.0) Public Domain Dedication-->
           </div>
           <div id="editor" class="editor-wrapper tab-content">
           </div>

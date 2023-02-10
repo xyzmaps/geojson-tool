@@ -29,24 +29,24 @@ import {
     IsJsonString
 } from './components/common'
 
-import {editor, startValue} from './components/editor'
+import { editor, startValue } from './components/editor'
 import { alertBar } from './components/alertBar.js'
 import './components/eventHandling'
-import {GeoRect} from "@here/xyz-maps-core";
+import { GeoRect } from "@here/xyz-maps-core";
 import { Selection } from 'monaco-editor'
 import * as monaco from "monaco-editor";
 
 let HERE = window.HERE,
-isPrettyPrint = false,
-clickedFeatureStyles = [],
-clickedFeatures,
-multipleHighlightedFeaturesStyles = [],
-multipleHighlightedFeatures,
-featuresTobeHighlighted = [],
-zoomValue = 2,
-isDebug = false;
+    isPrettyPrint = false,
+    clickedFeatureStyles = [],
+    clickedFeatures,
+    multipleHighlightedFeaturesStyles = [],
+    multipleHighlightedFeatures,
+    featuresTobeHighlighted = [],
+    zoomValue = 2,
+    isDebug = false;
 
-window.onload = function() {
+window.onload = function () {
     let mapEl = document.getElementById("map");
     document.querySelector('.zoom-info').innerHTML = display.getZoomlevel().toPrecision(2).toString();
 
@@ -63,7 +63,7 @@ window.onload = function() {
     }, false);
 
     display = initMap();
-    display.addEventListener('dbltap', function(ev){
+    display.addEventListener('dbltap', function (ev) {
         display.setZoomlevel(display.getZoomlevel() + 1, ev.mapX, ev.mapY);
         document.querySelector('.zoom-info').innerHTML = display.getZoomlevel().toPrecision(2).toString();
     });
@@ -74,7 +74,7 @@ window.onload = function() {
     });
 
     // add helpful comment to compass
-    document.querySelector('div[class$="-ui-needle"]').setAttribute('title',"To pitch and/or rotate, right click on map, and hold the mouse button while dragging the map.\nTo reset the map, click on the compass")
+    document.querySelector('div[class$="-ui-needle"]').setAttribute('title', "To pitch and/or rotate, right click on map, and hold the mouse button while dragging the map.\nTo reset the map, click on the compass")
     document.querySelector('div[class$="-ui-compass"]').style.bottom = "105px";
     document.querySelector('div[class$="-ui-compass"]').style.right = "12px";
 
@@ -86,27 +86,27 @@ window.onload = function() {
     document.getElementById("editor").ondrop = function (ev) {
         ev.stopPropagation();
         ev.preventDefault();
-        let fileFromTextarea = new File([editor.getValue()],"temp.geojson",{type: "application/json"});
+        let fileFromTextarea = new File([editor.getValue()], "temp.geojson", { type: "application/json" });
         let filesToMerge = Array.from(ev.dataTransfer.files).concat(fileFromTextarea);
         handleMultipleLocalFiles(filesToMerge);
     };
 
-    document.getElementById("editor").ondragover = function(e){
+    document.getElementById("editor").ondragover = function (e) {
         e = e || event;
         e.preventDefault();
-      };
+    };
 
     const model = editor.getModel();
 
     editor.onDidChangeModelContent(() => {
         const value = model.getValue();
-        if(IsJsonString(value) && !isPrettyPrint) {
+        if (IsJsonString(value) && !isPrettyPrint) {
             displayGeoJSON(JSON.parse(value));
             document.getElementById('changeFeatureColor').style["display"] = 'block';
         } else {
             document.getElementById('changeFeatureColor').style["display"] = 'none';
         }
-      });
+    });
 
     resizerX("sliderPan", function (e) {
         resizeX(e.pageX);
@@ -120,17 +120,17 @@ function initMap() {
     display.addEventListener('pointerup', function (ev) {
 
         let target = ev.target,
-        refresh = false,
-        data = {};
+            refresh = false,
+            data = {};
         document.querySelector('#info').innerHTML = "";
 
         if (target && target.properties && !target.properties.sort_rank) {
             let currentPtGeometryType = ev.target.geometry.type;
             data.geometry = {};
             data.geometry.type = ev.target.geometry.type;
-            if(target.properties) {
+            if (target.properties) {
                 data.properties = target.properties;
-            }else {
+            } else {
                 data.properties = {};
             }
             let formatter = new JSONFormatter(data, 1, {
@@ -141,42 +141,42 @@ function initMap() {
             formatter.openAtDepth(2);
 
             let counter, startLineNr,
-            startLine, currentLine = '';
+                startLine, currentLine = '';
 
             for (counter = 1; counter <= editor.getModel().getLineCount(); counter++) {
                 startLine = editor.getModel().getLineContent(counter);
-                if(startLine.indexOf('"geometry"') > -1 && !(startLine.indexOf('null') > -1) ) {
+                if (startLine.indexOf('"geometry"') > -1 && !(startLine.indexOf('null') > -1)) {
                     startLineNr = counter;
                     let geometryObj = '';
 
-                    while(currentLine.indexOf('}') < 0) {
+                    while (currentLine.indexOf('}') < 0) {
                         currentLine = editor.getModel().getLineContent(counter);
                         if (currentLine.indexOf("properties") > -1 && counter > 0) {
-                            currentLine = currentLine.slice(0,currentLine.indexOf("properties")-1);
+                            currentLine = currentLine.slice(0, currentLine.indexOf("properties") - 1);
                         }
                         geometryObj = geometryObj + currentLine;
                         counter++;
-                    }if (!geometryObj.endsWith("}")) {
-                        geometryObj = geometryObj.slice(0,geometryObj.lastIndexOf("}")+1);
+                    } if (!geometryObj.endsWith("}")) {
+                        geometryObj = geometryObj.slice(0, geometryObj.lastIndexOf("}") + 1);
                     }
                     if (currentPtGeometryType === "Polygon" || currentPtGeometryType === "MultiPolygon") {
                         delete ev.target.geometry._xyz;
                     }
-                    if(isEqual(JSON.parse('{'+geometryObj.split('{')[1]), ev.target.geometry)) {
-                       editor.setSelection(new Selection(startLineNr,1,counter,editor.getModel().getLineLength(counter)));
-                       editor.revealLineInCenter(startLineNr,0);
+                    if (isEqual(JSON.parse('{' + geometryObj.split('{')[1]), ev.target.geometry)) {
+                        editor.setSelection(new Selection(startLineNr, 1, counter, editor.getModel().getLineLength(counter)));
+                        editor.revealLineInCenter(startLineNr, 0);
                     }
                 }
                 currentLine = '';
             }
 
-            if(multipleHighlightedFeatures) {
+            if (multipleHighlightedFeatures) {
                 resetHighlightedFeaturesStyle();
             } // To reset previously highlighted ref features.
 
-            if(target.properties['association_ids'] && target.properties['association_ids'].length > 0) {
+            if (target.properties['association_ids'] && target.properties['association_ids'].length > 0) {
                 featuresTobeHighlighted = [];
-                target.properties['association_ids'].forEach(function(id) {
+                target.properties['association_ids'].forEach(function (id) {
                     featuresTobeHighlighted.push(featureProvider.getFeature(id));
                 });
                 highlightMultipleFeatures(featuresTobeHighlighted);
@@ -199,11 +199,11 @@ function initMap() {
 
 function highlightSelectedFeatures(selectedFeatures) {
     let layerKey = 1;
-    if(!Array.isArray(selectedFeatures)) {
+    if (!Array.isArray(selectedFeatures)) {
         selectedFeatures = [selectedFeatures];
     }
 
-    if(spaceLayer) {
+    if (spaceLayer) {
         layerKey = 2;
     }
 
@@ -213,14 +213,14 @@ function highlightSelectedFeatures(selectedFeatures) {
 
     }
 
-    if(selectedFeatures[0] && selectedFeatures[0].properties.sort_rank && selectedFeatures[0].properties.kind) {
+    if (selectedFeatures[0] && selectedFeatures[0].properties.sort_rank && selectedFeatures[0].properties.kind) {
         clickedFeatures = null; // if mvt layer is enabled.
     } else {
         clickedFeatures = selectedFeatures;
     }
 
-    for(let j = 0; clickedFeatures && (j < clickedFeatures.length); j++ ){
-        if(clickedFeatures[`${j}`]) {
+    for (let j = 0; clickedFeatures && (j < clickedFeatures.length); j++) {
+        if (clickedFeatures[`${j}`]) {
             clickedFeatureStyles[`${j}`] = display.getLayers()[`${layerKey}`].getStyleGroup(clickedFeatures[`${j}`]);
 
             // Set new feature style if mouse clicks on a feature
@@ -232,23 +232,23 @@ function highlightSelectedFeatures(selectedFeatures) {
 function highlightMultipleFeatures(selectedFeatures) {
     let layerKey = 1;
 
-    if(!Array.isArray(selectedFeatures)) {
+    if (!Array.isArray(selectedFeatures)) {
         selectedFeatures = [selectedFeatures];
     }
 
-    if(spaceLayer) {
+    if (spaceLayer) {
         layerKey = 2;
     }
 
-    if(selectedFeatures[0] && selectedFeatures[0].properties.sort_rank && selectedFeatures[0].properties.kind) {
+    if (selectedFeatures[0] && selectedFeatures[0].properties.sort_rank && selectedFeatures[0].properties.kind) {
         clickedFeatures = null; // if mvt layer is enabled.
     } else {
         multipleHighlightedFeatures = selectedFeatures;
     }
 
-    for(let j = 0; multipleHighlightedFeatures && (j < multipleHighlightedFeatures.length); j++ ){
+    for (let j = 0; multipleHighlightedFeatures && (j < multipleHighlightedFeatures.length); j++) {
 
-        if(multipleHighlightedFeatures[`${j}`]) {
+        if (multipleHighlightedFeatures[`${j}`]) {
             multipleHighlightedFeaturesStyles[`${j}`] = display.getLayers()[`${layerKey}`].getStyleGroup(multipleHighlightedFeatures[`${j}`]);
 
             // Set new feature style if mouse clicks on a feature
@@ -260,7 +260,7 @@ function highlightMultipleFeatures(selectedFeatures) {
 function resetHighlightedFeaturesStyle() {
     let layerKey = 1;
 
-    if(spaceLayer) {
+    if (spaceLayer) {
         layerKey = 2;
     }
 
@@ -272,13 +272,13 @@ function resetHighlightedFeaturesStyle() {
 
 function setHighlightedStyle(clickedFeatures, j, color) {
     let currentBearing = clickedFeatures[`${j}`].properties.vehicleBearing || clickedFeatures[`${j}`].properties.heading_deg,
-    currentMarker = clickedFeatures[`${j}`].properties["marker-url"],
-    currentMarkerText = clickedFeatures[`${j}`].properties["marker-text"],
-    currentGeometryType = clickedFeatures[`${j}`].geometry.type,
-    geometryType = currentGeometryType === "LineString" || currentGeometryType === "MultiLineString" ? "Line" :
-                        currentGeometryType === "Polygon" || currentGeometryType === "MultiPolygon" ? "Polygon" :
-                        currentGeometryType === "Point" || currentGeometryType === "MultiPoint" ? "Circle" :
-                        currentGeometryType;
+        currentMarker = clickedFeatures[`${j}`].properties["marker-url"],
+        currentMarkerText = clickedFeatures[`${j}`].properties["marker-text"],
+        currentGeometryType = clickedFeatures[`${j}`].geometry.type,
+        geometryType = currentGeometryType === "LineString" || currentGeometryType === "MultiLineString" ? "Line" :
+            currentGeometryType === "Polygon" || currentGeometryType === "MultiPolygon" ? "Polygon" :
+                currentGeometryType === "Point" || currentGeometryType === "MultiPoint" ? "Circle" :
+                    currentGeometryType;
     let customStyle = {
         zIndex: 1000,
         stroke: currentMarkerText ? '' : color ? color : "magenta",
@@ -287,42 +287,42 @@ function setHighlightedStyle(clickedFeatures, j, color) {
         width: 32,
         height: 32,
         text: currentMarkerText,
-        font:"normal 14px Arial",
+        font: "normal 14px Arial",
         rotation: currentBearing,
-        fill: function(feature) {
-            if(currentMarkerText) {
+        fill: function (feature) {
+            if (currentMarkerText) {
                 return color ? 'black' : "magenta";
-            }else {
+            } else {
                 return geometryType === "Line" ? '' : color ? color : "magenta";
             }
         },
         type: currentBearing || currentMarker ? 'Image' : currentMarkerText ? 'Text' : geometryType,
-        opacity: function(feature) {
-            if(currentBearing || currentMarker) {
+        opacity: function (feature) {
+            if (currentBearing || currentMarker) {
                 return 0.6;
-            } else if(feature.geometry.type.indexOf('Point') > -1 || feature.geometry.type.indexOf('LineString') > -1 ) {
+            } else if (feature.geometry.type.indexOf('Point') > -1 || feature.geometry.type.indexOf('LineString') > -1) {
                 return 1;
             } else {
                 return 0.3;
             }
         },
-        src: function(feature) {
-            if(currentMarker) {
+        src: function (feature) {
+            if (currentMarker) {
                 return currentMarker;
-            } else if(currentBearing) {
+            } else if (currentBearing) {
                 return getDirectionImage('magenta');
             }
         }
     };
 
-    if(currentMarkerText) {
+    if (currentMarkerText) {
         customStyle.zIndex = 4;
     }
     return customStyle;
 }
 
 function getgeoJSONByUrl() {
-    if(document.querySelector('#geojson-url').value !== ''){
+    if (document.querySelector('#geojson-url').value !== '') {
         clearURLParam();
         multipleHttpGetAsync(document.querySelector('#geojson-url').value);
     }
@@ -330,49 +330,49 @@ function getgeoJSONByUrl() {
 
 function getGeojsonByUrlOrLatlong() {
     let geojsonUrlOrLatlong = document.querySelector('#geojson-url-or-latlong').value,
-    isURL = geojsonUrlOrLatlong.includes('/');
-    if(geojsonUrlOrLatlong.substring(0,4) === 'http' && isURL){
+        isURL = geojsonUrlOrLatlong.includes('/');
+    if (geojsonUrlOrLatlong.substring(0, 4) === 'http' && isURL) {
         clearURLParam();
         multipleHttpGetAsync(geojsonUrlOrLatlong);
-    }else {
+    } else {
         let lat = parseFloat(geojsonUrlOrLatlong.split(",")[1]),
-        long = parseFloat(geojsonUrlOrLatlong.split(",")[0]);
+            long = parseFloat(geojsonUrlOrLatlong.split(",")[0]);
         if (!isNaN(lat) && !isNaN(long)) {
             getLatLong(long, lat);
         }
     }
 }
 
-document.querySelector('.getgeoJSONByUrl').addEventListener('click', function(){
+document.querySelector('.getgeoJSONByUrl').addEventListener('click', function () {
     getgeoJSONByUrl();
 });
 
-document.querySelector('.latlongBtn').addEventListener('click', function(){
+document.querySelector('.latlongBtn').addEventListener('click', function () {
     getGeojsonByUrlOrLatlong();
 });
 
 
 editor.onDidChangeCursorSelection(() => {
     let featureFromProvider,
-    selectedString = editor.getModel().getValueInRange(editor.getSelection()),
-    isPositionInEditor = isPosition(selectedString);
-    if(isPositionInEditor) {
+        selectedString = editor.getModel().getValueInRange(editor.getSelection()),
+        isPositionInEditor = isPosition(selectedString);
+    if (isPositionInEditor) {
         document.getElementById('info').innerHTML = "";
         display.setCenter(isPositionInEditor);
         display.setZoomlevel(20);
-    } else if(IsJsonString(selectedString)) {
+    } else if (IsJsonString(selectedString)) {
         let feature = JSON.parse(selectedString);
-        if( geojsonValidation.isFeature(feature) ) {
-            for(let key in featureProvider.IDPOOL) {
+        if (geojsonValidation.isFeature(feature)) {
+            for (let key in featureProvider.IDPOOL) {
                 featureFromProvider = featureProvider.IDPOOL[`${key}`].feature;
-                if( isEqual(featureFromProvider.geometry, feature.geometry)) {
+                if (isEqual(featureFromProvider.geometry, feature.geometry)) {
                     let minLon = featureFromProvider.bbox[0],
-                     minLat = featureFromProvider.bbox[1],
-                     maxLon = featureFromProvider.bbox[2],
-                     maxLat = featureFromProvider.bbox[3];
+                        minLat = featureFromProvider.bbox[1],
+                        maxLon = featureFromProvider.bbox[2],
+                        maxLat = featureFromProvider.bbox[3];
                     highlightSelectedFeatures(featureFromProvider);
                     display.setViewBounds(
-                        new GeoRect( minLon, minLat, maxLon, maxLat)
+                        new GeoRect(minLon, minLat, maxLon, maxLat)
                     );
                 }
             }
@@ -382,56 +382,53 @@ editor.onDidChangeCursorSelection(() => {
     }
 })
 
-document.getElementById('geojsonFileInput').onclick = function() {
+document.getElementById('geojsonFileInput').onclick = function () {
     this.value = null;
 };
 
-document.getElementById('geojsonFileInput').onchange = function() {
+document.getElementById('geojsonFileInput').onchange = function () {
     handleMultipleLocalFiles(document.querySelector('#geojsonFileInput').files);
 };
 
-document.getElementById("geojson-url-or-latlong").addEventListener("keyup", function(event) {
+document.getElementById("geojson-url-or-latlong").addEventListener("keyup", function (event) {
     event.preventDefault();
     if (event.keyCode === 13) {
         getGeojsonByUrlOrLatlong();
     }
 });
 
-document.querySelector('#geojson-url').addEventListener("keyup", function(event) {
+document.querySelector('#geojson-url').addEventListener("keyup", function (event) {
     event.preventDefault();
     if (event.keyCode === 13) {
         getgeoJSONByUrl();
     }
 });
 
-document.body.addEventListener('click', function(event) {
+document.body.addEventListener('click', function (event) {
     let provider = featureProvider;
-    if (event.target.className === 'json-formatter-key' && event.target.nextSibling.innerText)
-    {
+    if (event.target.className === 'json-formatter-key' && event.target.nextSibling.innerText) {
         let propertyValue,
             featureFromProvider,
             featureTobeHighlight = [],
             totalFeatureCountOnMap = 0,
             propertyLabel = event.target.innerText.replace(/:\s*$/, '');
 
-        if(event.target.nextSibling.className === 'json-formatter-boolean')
-        {
-            propertyValue = JSON.parse( event.target.nextSibling.innerText.replace(/['"]+/g, '') ); // Converting string boolean value to boolean
-        } else
-        {
+        if (event.target.nextSibling.className === 'json-formatter-boolean') {
+            propertyValue = JSON.parse(event.target.nextSibling.innerText.replace(/['"]+/g, '')); // Converting string boolean value to boolean
+        } else {
             propertyValue = event.target.nextSibling.innerText.replace(/['"]+/g, '');
         }
 
-        if(spaceProvider) {
+        if (spaceProvider) {
             provider = spaceProvider;
         }
 
-        for(let id in provider.IDPOOL) {
+        for (let id in provider.IDPOOL) {
             featureFromProvider = provider.IDPOOL[`${id}`].feature;
 
             for (let key in featureFromProvider.properties) {
 
-                if(key === propertyLabel) {
+                if (key === propertyLabel) {
 
                     if (featureFromProvider.properties[`${key}`] === propertyValue) {
 
@@ -444,15 +441,15 @@ document.body.addEventListener('click', function(event) {
 
         highlightSelectedFeatures(featureTobeHighlight);
 
-        if(featureTobeHighlight.length > 0) {
-            alertBar(1, 'success', 'Displaying '+ totalFeatureCountOnMap +' feature(s), highlighting '+ featureTobeHighlight.length +' feature(s) with <i>' + propertyLabel + ' : ' + propertyValue +'</i>');
+        if (featureTobeHighlight.length > 0) {
+            alertBar(1, 'success', 'Displaying ' + totalFeatureCountOnMap + ' feature(s), highlighting ' + featureTobeHighlight.length + ' feature(s) with <i>' + propertyLabel + ' : ' + propertyValue + '</i>');
         } else {
             alertBar(0);
         }
     }
 });
 
-document.getElementById('showQuadkeys').addEventListener('click', function(){
+document.getElementById('showQuadkeys').addEventListener('click', function () {
     if (isDebug) {
         display.debug(false);
         isDebug = false;
@@ -477,12 +474,13 @@ document.getElementById("darkMode").addEventListener('click', function () {
         }
         document.getElementById('load-data-wrapper').style.color = "#fff";
         document.getElementById('load-data-wrapper').style.backgroundColor = "#1e1e1e";
-        document.getElementById('editor-tab').style.background = 'url("images/document-editWhite.svg") no-repeat center';
-        document.getElementById('load-data-tab').style.background = 'url("images/file-uploadWhite.svg") no-repeat center';
-        document.getElementById('load-sample-tab').style.background = 'url("images/worldwideWhite.svg") no-repeat center';
-        document.getElementById('copyToClipboard').style.background = 'url("images/cpWhite.svg") no-repeat center';
-        document.getElementById('clearContent').style.background = 'url("images/cleaningWhite.svg") no-repeat center';
-        this.style.background = 'url("images/light-mode.svg") no-repeat center'
+        document.getElementById('editor-tab').style.background = 'url("../images/dark/code.svg") no-repeat center';
+        document.getElementById('load-data-tab').style.background = 'url("../images/dark/tool.svg") no-repeat center';
+        document.getElementById('load-sample-tab').style.background = 'url("../images/dark/gift.svg") no-repeat center';
+        document.getElementById('copyToClipboard').style.background = 'url("../images/dark/copy.svg") no-repeat center';
+        document.getElementById('clearContent').style.background = 'url("../images/dark/trash-2.svg") no-repeat center';
+        document.getElementById('sliderPan').className = 'sliderPanDark';
+        this.style.background = 'url("../images/dark/sun.svg") no-repeat center';
         this.title = "Light Mode"
     } else {
         ///light mode
@@ -497,16 +495,17 @@ document.getElementById("darkMode").addEventListener('click', function () {
         for (let it of document.getElementsByClassName("button")) {
             it.style.color = "#000"
         }
-        document.getElementById('editor-tab').style.background = 'url("../images/document-edit.svg") no-repeat center';
-        document.getElementById('load-data-tab').style.background = 'url("../images/file-upload.svg") no-repeat center';
-        document.getElementById('load-sample-tab').style.background = 'url("../images/worldwide.svg") no-repeat center';
-        document.getElementById('copyToClipboard').style.background = 'url("../images/cp.svg") no-repeat center';
-        document.getElementById('clearContent').style.background = 'url("../images/cleaning.svg") no-repeat center';
-        this.style.background = 'url("../images/dark-mode.svg") no-repeat center';
+        document.getElementById('editor-tab').style.background = 'url("../images/light/code.svg") no-repeat center';
+        document.getElementById('load-data-tab').style.background = 'url("../images/light/tool.svg") no-repeat center';
+        document.getElementById('load-sample-tab').style.background = 'url("../images/light/gift.svg") no-repeat center';
+        document.getElementById('copyToClipboard').style.background = 'url("../images/light/copy.svg") no-repeat center';
+        document.getElementById('clearContent').style.background = 'url("../images/light/trash-2.svg") no-repeat center';
+        document.getElementById('sliderPan').className = 'sliderPan';
+        this.style.background = 'url("../images/light/moon.svg") no-repeat center';
         this.title = "Dark Mode"
     }
     document.getElementById('editor').style.display = "block";
     document.getElementById('editor').className = "tabLinks selected";
 })
 
-setTimeout(()=>display.resize(),0);
+setTimeout(() => display.resize(), 0);

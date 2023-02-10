@@ -73,6 +73,7 @@ document.getElementById('changeFeatureColor').addEventListener('click', function
             }
         }
     })
+    window.display.refresh();
 });
 
 document.getElementById('mapSwitcher').addEventListener('click', function(e){
