@@ -61,7 +61,10 @@ let config = {
         "latitude": urlParam ? lat : 11.38269
     },
     ui: {
-        ZoomControl: false
+        ZoomControl: false,
+        Copyright: {
+            defaultOwner: "OpenStreetMap contributors"
+        }
     },
     layers: [springSoftLayer, featureLayer],
     behavior: {
