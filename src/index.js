@@ -474,13 +474,13 @@ document.getElementById("darkMode").addEventListener('click', function () {
         }
         document.getElementById('load-data-wrapper').style.color = "#fff";
         document.getElementById('load-data-wrapper').style.backgroundColor = "#1e1e1e";
-        document.getElementById('editor-tab').style.background = 'url("../images/dark/code.svg") no-repeat center';
-        document.getElementById('load-data-tab').style.background = 'url("../images/dark/tool.svg") no-repeat center';
-        document.getElementById('load-sample-tab').style.background = 'url("../images/dark/gift.svg") no-repeat center';
-        document.getElementById('copyToClipboard').style.background = 'url("../images/dark/copy.svg") no-repeat center';
-        document.getElementById('clearContent').style.background = 'url("../images/dark/trash-2.svg") no-repeat center';
+        document.getElementById('editor-tab').style.background = 'url("images/dark/code.svg") no-repeat center';
+        document.getElementById('load-data-tab').style.background = 'url("images/dark/tool.svg") no-repeat center';
+        document.getElementById('load-sample-tab').style.background = 'url("images/dark/gift.svg") no-repeat center';
+        document.getElementById('copyToClipboard').style.background = 'url("images/dark/copy.svg") no-repeat center';
+        document.getElementById('clearContent').style.background = 'url("images/dark/trash-2.svg") no-repeat center';
         document.getElementById('sliderPan').className = 'sliderPanDark';
-        this.style.background = 'url("../images/dark/sun.svg") no-repeat center';
+        this.style.background = 'url("images/dark/sun.svg") no-repeat center';
         this.title = "Light Mode"
     } else {
         ///light mode
@@ -495,13 +495,13 @@ document.getElementById("darkMode").addEventListener('click', function () {
         for (let it of document.getElementsByClassName("button")) {
             it.style.color = "#000"
         }
-        document.getElementById('editor-tab').style.background = 'url("../images/light/code.svg") no-repeat center';
-        document.getElementById('load-data-tab').style.background = 'url("../images/light/tool.svg") no-repeat center';
-        document.getElementById('load-sample-tab').style.background = 'url("../images/light/gift.svg") no-repeat center';
-        document.getElementById('copyToClipboard').style.background = 'url("../images/light/copy.svg") no-repeat center';
-        document.getElementById('clearContent').style.background = 'url("../images/light/trash-2.svg") no-repeat center';
+        document.getElementById('editor-tab').style.background = 'url("images/light/code.svg") no-repeat center';
+        document.getElementById('load-data-tab').style.background = 'url("images/light/tool.svg") no-repeat center';
+        document.getElementById('load-sample-tab').style.background = 'url("images/light/gift.svg") no-repeat center';
+        document.getElementById('copyToClipboard').style.background = 'url("images/light/copy.svg") no-repeat center';
+        document.getElementById('clearContent').style.background = 'url("images/light/trash-2.svg") no-repeat center';
         document.getElementById('sliderPan').className = 'sliderPan';
-        this.style.background = 'url("../images/light/moon.svg") no-repeat center';
+        this.style.background = 'url("images/light/moon.svg") no-repeat center';
         this.title = "Dark Mode"
     }
     document.getElementById('editor').style.display = "block";
