@@ -1,8 +1,8 @@
-# GeoJSON Tool
+# XYZ GeoJSON Tool
 
 A web based visualization tool for GeoJSON data.
 
-### [GeoJSON.tools site](http://geojson.tools)
+[XYZ GeoJSON on github pages](https://xyzmaps.github.io/geojson-tool/)
 
 ## Overview
 
@@ -53,15 +53,9 @@ npm start
 An App will be served at http://localhost:3000
 
 
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/heremaps/geojson-tool/tags).
-
-
 ## License
 
-Copyright (C) 2023 XYZ Maps and contributors
+Copyright (C) 2023- XYZ Maps and contributors
 
 Copyright (C) 2019 HERE Europe B.V.
 
